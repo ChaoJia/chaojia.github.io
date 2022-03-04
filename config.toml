@@ -64,7 +64,6 @@ titleSeparator = "•"
 [params.social]
 email = "chao.cj.jia@gmail.com"
 github = "ChaoJia"
-gitlab = "chao-jia"
 
 [params.comments]
 enable = true
