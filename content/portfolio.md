@@ -31,6 +31,7 @@ https://gitlab.com/chao-jia/pbd
 
 ## Heightfield Water Simulation and Rendering
 {{< youtube xU9GIU0JsA0 >}}
+
 Heightfield-based real-time water simulation with C++, Qt 5  and OpenGL 4 as a freely chosen topic for the final assignment of a practicum course in 2016 summer semester.  Inspired by WebGL Water (https://madebyevan.com/webgl-water/).
 
 Source code:
