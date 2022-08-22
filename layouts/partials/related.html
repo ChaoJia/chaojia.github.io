@@ -1,0 +1,14 @@
+{{ if isset .Params "series" }}
+{{ $currentLink := .Permalink }}
+{{$related := where .Site.RegularPages ".Params.series" "intersect" .Params.series }}
+    <h2 class="post_related">Posts in this Series</h2>
+    <ul>
+        {{ range ($related).Reverse }}
+            {{ if eq $currentLink .Permalink }}
+                <li>{{ .Title }} (this post)</li>
+            {{ else }}
+                <li><a href="{{ .Permalink }}" class="nav-link" title="{{ .Title }}">{{ .Title }}</a></li>
+            {{ end }}
+      {{ end }}
+    </ul>
+{{ end }}

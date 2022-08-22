@@ -1,0 +1,39 @@
+{{ if .Site.Params.utterancesRepo }}
+<script type="module">
+// "module" to delay js exec https://stackoverflow.com/a/2920207/2277106
+const light = 'lit';
+const dark = 'dim';
+const storageKey = 'colorMode';
+const key = '--color-mode';
+const data = 'data-mode';
+const bank = window.localStorage;
+
+function currentMode() {
+  let acceptableChars = light + dark;
+  acceptableChars = [...acceptableChars];
+  let mode = getComputedStyle(doc).getPropertyValue(key).replace(/\"/g, '').trim();
+
+  mode = [...mode].filter(function(letter){
+    return acceptableChars.includes(letter);
+  });
+
+  return mode.join('');
+}
+
+function appendUtterances() {
+  let initialTheme = currentMode() == dark ? 'github-dark' : 'github-light';
+  const s = document.createElement('script');
+  s.src = 'https://utteranc.es/client.js';
+  s.setAttribute('repo', '{{.Site.Params.utterancesRepo}}');
+  s.setAttribute('issue-term', '{{.Site.Params.utterancesIssueTerm | default "pathname"}}');
+  s.setAttribute('theme', initialTheme);
+  s.setAttribute('crossorigin', 'anonymous');
+  s.setAttribute('async', '');
+  const commentsContainer = document.getElementsByClassName('post_comments')[0];
+  commentsContainer.appendChild(s);
+}
+
+appendUtterances();
+
+</script>
+{{ end }}

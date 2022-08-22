@@ -1,0 +1,29 @@
+// override clarity theme's  _variables.sass file.
+// we recommend not editing this file directly. Instead, create an `assets/sass/_override.sass` file at the root level of your site.
+// if you edit this file directly, you will have to resolve git conflicts when and if you decide to pull changes we make on the theme
+
+$bg: #3f3f3f
+$haze: #dddddd
+$theme: #2196f3
+
+html
+  --bg: #1e1e1e
+  --text: #333333
+
+  &[data-mode="dim"]
+    .color
+      &_choice
+        &::after
+          background-image: url("#{$images}night-moon.svg")
+          transform: translateX(1.4rem)
+
+  @media (prefers-color-scheme: dark)
+
+    &:not([data-mode="lit"])
+      .color
+        &_choice
+          &::after
+            background-image: url("#{$images}night-moon.svg")
+            transform: translateX(1.4rem)
+  &[data-mode="dim"]
+    --light: hsla(0,0%,100%,0.67) 

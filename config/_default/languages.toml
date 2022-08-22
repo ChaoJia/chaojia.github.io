@@ -1,0 +1,10 @@
+
+[en]
+  # title = "Clarity"
+  LanguageName = "English"
+  weight = 1
+
+# [de]
+  # title = "Claridade" # just for the sake of showing this is possible
+  # LanguageName = "Deutsch"
+  # weight = 2

@@ -1,0 +1,145 @@
+// add customs styles and general overrides here
+// due to the cascading nature of css, if you try to override theme css variables in this file, those changes will not apply. Instead, override css variables in the `override.sass` file
+// we recommend not editing this file directly. Instead, create an `assets/sass/_custom.sass` file at the root level of your site.
+// if you edit this file directly, you will have to resolve git conflicts when and if you decide to pull changes we make on the theme
+
+
+body
+  font-size: 1.08rem
+  line-height: 1.5
+ 
+h1
+  font-size: 145%
+  font-weight: 800
+h2
+  font-size: 130%
+  font-weight: 800 
+h3
+  font-size: 130%
+  font-weight: bold
+h4
+  font-size: 125%
+h5
+  font-size: 110%
+
+code
+  font-size: 90%
+  &.noClass
+    --inlineColor: rgb(96, 162, 162)
+
+.nav
+  &_item
+    padding: 0.25rem 1.5rem
+    font-family: "Arial Black", sans-serif
+    font-size: 120%
+  &_brand
+    img
+      max-width: 9rem
+.content
+  padding-top: 3rem
+
+.button
+  padding: 0.25rem 0.8rem
+  text-transform: uppercase
+  border-radius: 0.5rem
+  font-size: 0.8rem
+
+.utterances
+  max-width: 100%
+
+.center-figure
+  text-align: center
+
+.image_featured
+  max-width: 100%
+
+.img-cmp-div
+  position: relative 
+  max-width: 100%
+  margin: 0.5rem 0rem 0.5rem 0rem
+
+.img-cmp-bg-div 
+  position: absolute
+  max-width: 100%
+  width: auto 
+  height: auto 
+  overflow: hidden 
+  margin: 0rem
+  padding: 0rem 0rem
+  img 
+    width: 100% 
+    height: 200px 
+    display: block 
+    vertical-align: middle 
+    margin: 0rem
+    padding: 0rem 0rem
+ 
+.img-cmp-fg-div
+  position: absolute
+  width: 100%
+  height: auto 
+  overflow: hidden 
+  margin: 0rem
+  padding: 0rem 0rem
+  img 
+    width: 100%
+    height: 200px 
+    display: block 
+    vertical-align: middle 
+    margin: 0rem
+    padding: 0rem 0rem
+
+.img-cmp-slider 
+  position: absolute 
+  z-index: 9 
+  cursor: ew-resize 
+  width: 4px 
+  background-color: #2196F3
+  opacity: 0.5 
+  margin: 0rem
+  padding: 0rem 0rem
+
+.img-cmp-slider-button 
+  position: absolute 
+  z-index: 10
+  cursor: grab 
+  width: 20px 
+  height: 20px 
+  left: calc(50% - 10px)
+  top: calc(50% - 10px)
+  background-color: #2196F3
+  vertical-align: middle 
+  opacity: 1
+  margin: 0rem
+  padding: 0rem 0rem
+  transform: rotate(-45deg)
+  &:active
+    cursor: grabbing
+  
+.to-top-button
+  display: inline-flex
+  justify-content: center
+  align-items: center
+  margin: 0 0.5rem
+  &, img, svg
+    width: 1.6rem
+    height: 1.6rem
+
+.youtube
+  position: relative
+  margin: 2rem auto 
+  width: 98%
+  padding-bottom: 55.25%
+  overflow: hidden
+  height: 0
+  border-radius: 0.6rem
+  background-color: var(--bg)
+  box-shadow: 0 1rem 2rem rgba(0,0,0,0.17)
+  iframe
+    position: absolute
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    border: none
+    transform: scale(1.02)

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.1"
+   width="304.54141"
+   height="304.54141"
+   id="svg5227"
+   sodipodi:docname="top-button.svg"
+   inkscape:version="1.2 (dc2aedaf03, 2022-05-15)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview5229"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="1.5365239"
+     inkscape:cx="-32.215574"
+     inkscape:cy="151.31558"
+     inkscape:window-width="1920"
+     inkscape:window-height="991"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs5191">
+    <clipPath
+       id="HOlnmcWmteKa">
+      <path
+         fill="none"
+         stroke="none"
+         d="M 0,0 H 756 V 740 H 0 Z"
+         id="path5188" />
+    </clipPath>
+  </defs>
+  <g
+     inkscape:groupmode="layer"
+     id="layer1"
+     inkscape:label="symbol">
+    <path
+       fill="#993300"
+       stroke="none"
+       paint-order="stroke fill markers"
+       fill-rule="evenodd"
+       d="m 152.2707,160.96118 -60.16686,45.0647 h 45.12514 v 45.0647 h 30.08343 v -45.0647 h 45.12515 z"
+       fill-opacity="0.0980392"
+       id="path5195"
+       style="fill:#62b6f5;fill-opacity:1;stroke:#ffffff;stroke-width:0.999997;stroke-opacity:1" />
+  </g>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-weight:normal;font-size:106.667px;line-height:1.2;font-family:sans-serif;fill:#62b6f5;fill-opacity:1;stroke:none;stroke-width:1"
+     x="155.19951"
+     y="130.71095"
+     id="text293"><tspan
+       sodipodi:role="line"
+       id="tspan291"
+       x="155.19951"
+       y="130.71095"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:106.667px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;text-anchor:middle;fill:#62b6f5;fill-opacity:1;stroke-width:1">TOP</tspan></text>
+</svg>
