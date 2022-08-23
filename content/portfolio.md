@@ -4,14 +4,13 @@ title = "Portfolio"
 date = "2022-08-20"
 description = "Portfolio"
 thumbnail = "images/portfolio-thumbnail.jpg"
-
 +++
 
 ## Real-Time C++ Vulkan Renderer with RTX global illumination
 
 {{< youtube Ca6BCejFWLw>}}
 
-Showcase of my Vulkan renderer featuring Dynamic Diffuse Global Illumination (DDGI) [^scaling-ddgi] [^ddgi], ray-traced soft shadow and specular reflections with spatial temporal denoising (SVGF [^svgf]). The renderer is implemented with C++, Vulkan and GLSL. 
+Showcase of my Vulkan renderer featuring Dynamic Diffuse Global Illumination (DDGI) [^scaling-ddgi] [^ddgi], ray-traced soft shadow and specular reflections with spatial-temporal denoising (SVGF [^svgf]). The renderer is implemented with C++, Vulkan and GLSL. 
 
 Source code: 
 https://gitlab.com/chao-jia/spock
@@ -36,6 +35,10 @@ Heightfield-based real-time water simulation with C++, Qt 5  and OpenGL 4 as a f
 
 Source code:
 https://gitlab.com/chao-jia/height_field_water
+
+
+## Other projects
+See [here]({{< ref "/content/about.md#projects" >}}) for more projects I've worked on.
 
 [^scaling-ddgi]: Zander Majercik, Adam Marrs, Josef Spjut, and Morgan McGuire, [Scaling Probe-Based Real-Time Dynamic Global Illumination for Production](https://jcgt.org/published/0010/02/01/), Journal of Computer Graphics Techniques (JCGT), vol. 10, no. 2, 1-29, 2021
 [^ddgi]: Zander Majercik, Jean-Philippe Guertin, Derek Nowrouzezahrai, and Morgan McGuire, [Dynamic Diffuse Global Illumination with Ray-Traced Irradiance Fields](https://jcgt.org/published/0008/02/01/), Journal of Computer Graphics Techniques (JCGT), vol. 8, no. 2, 1-30, 2019
