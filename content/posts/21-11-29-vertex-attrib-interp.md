@@ -14,8 +14,8 @@ tags:
 thumbnail: "/images/posts/2021-11-29/attr_interp_thumbnail.svg"
 ---
 
-For visibility buffer rendering [^paper-2013] [^filmic-world-blog], we cannot rely on the hardware rasterization and built-in functions in fragment shader to do the vertex attribute interpolation and implicitly compute partial derivatives (i.e. `dFdx` and `dFdy` in _glsl_). This article describes the math behind a simple way to analytically compute these values, and provides formulas that can be easily translated to shader code. 
-Although there are some existing implementations, they are [not quite satisfactory]({{< relref "#pitfalls-existing-implementations" >}}), which motivates me to do my own math [^lastmod-date].
+For visibility buffer rendering [^paper-2013] [^filmic-world-blog], we cannot rely on the hardware rasterization and built-in functions in fragment shader to do the vertex attribute interpolation and implicitly compute partial derivatives (i.e. `dFdx` and `dFdy` in _glsl_). This article describes the math behind a simple way to analytically compute these values, and provides formulas that can be easily translated to [shader code](https://gitlab.com/chao-jia/spock/-/blob/edc9e132e47c6696f2cc08002368224536107bbd/assets/glsl/basic_test/lighting_utils.h.glsl#L332) [^glsl-impl]. 
+Although there are some existing implementations, they are [not quite satisfactory]({{< relref "#pitfalls-existing-implementations" >}}), which motivates me to do my own math.
 <!--more-->
 
 In general, we want to interpolate attributes (e.g. uv or normal) in a space before the perspective transform (object space, world space or camera space), as this is where these attributes are usually created. Therefore, in order to calculate the attributes of a pixel, we need to find the barycentric coordinates of the point in a pre-perspective space that is projected to that pixel. Because transform between pre-perspective spaces are affine transformations which preserve barycentric coordinates, without loss of generality, we can assume object space, world space and camera space are identical, and simply start with camera space.
@@ -133,7 +133,7 @@ $$
 \frac{\partial \lambda^n_i}{\partial y^n} = \frac{x^n_{i \oplus 2} - x^n_{i \oplus 1}}{\mathcal{D}}. 
 $$
 
-An advantage of this approach is that once the matrices $\bm{T_x}$ and $\bm{T_y}$ in the above equation is calculated, it can be used to compute screen-space partial derivatives of any attributes.
+An advantage of this approach is that once the matrices $\bm{T_x}$ and $\bm{T_y}$ in the above equation is calculated, it can be used to compute screen-space partial derivatives of any attributes. . 
 
 ## Result {#result}
 
@@ -149,7 +149,7 @@ Average  |  Median  | Maximum
 
 <!-- ![Difference between hardware-generated and analytical derivatives of uv coordinates](/images/posts/2021-11-29/duv_diff.png) -->
 
-The color in the image above shows the difference between analytically computed and hardware-generated derivatives of uv coordinates. The difference is calculated as $\Vert\frac{\partial(UV)}{\partial x^n} - \texttt{dFdx(UV)}\Vert + \Vert\frac{\partial(UV)}{\partial y^n} - \texttt{dFdy(UV)}\Vert$ , with hardware-generated derivatives in $\texttt{monospaced font}$. Other than a few sparse bright spots, the image is mostly black, meaning that the difference is mostly negligible, and the analytical derivatives are indeed very accurate and precise.
+The color in the image above shows the difference between analytically computed and hardware-generated derivatives of uv coordinates. The difference is calculated as $\Vert\frac{\partial(UV)}{\partial x^n} - \texttt{dFdx(UV)}\Vert + \Vert\frac{\partial(UV)}{\partial y^n} - \texttt{dFdy(UV)}\Vert$ , with hardware-generated derivatives in $\texttt{monospaced font}$. Other than a few sparse bright spots, the image is mostly black, meaning that the difference is mostly negligible, and the analytical derivatives are indeed very accurate and precise. 
 
 ## Pitfalls of some existing implementations {#pitfalls-existing-implementations}
 
@@ -212,9 +212,9 @@ which implies that $\frac{1}{w}$ is linear in screen space.
 
 [^filmic-world-blog]: [Visibility Buffer Rendering with Material Graphs](http://filmicworlds.com/blog/visibility-buffer-rendering-with-material-graphs/)
 
-[^lastmod-date]: The calculation was done by 29th Nov 2021, but I only had the time a few months later to get the write-up done.
+[^glsl-impl]: My glsl implementation that roughly followed this article can be found [here](https://gitlab.com/chao-jia/spock/-/blob/edc9e132e47c6696f2cc08002368224536107bbd/assets/glsl/basic_test/lighting_utils.h.glsl#L332); the derivation and the glsl implementation was already done by 29th Nov 2021, but I only had the time a few months later to get the write-up done
 
-[^dais-paper]: Christoph Schied and Carsten Dachsbacher. 2015. _[Deferred attribute interpolation for memory-efficient deferred shading](https://cg.ivd.kit.edu/publications/2015/dais/DAIS.pdf)_. In Proceedings of the 7th Conference on High-Performance Graphics (HPG '15). Association for Computing Machinery, New York, NY, USA, 43–49. https://doi.org/10.1145/2790060.2790066
+[^dais-paper]: Christoph Schied and Carsten Dachsbacher. 2015. _[Deferred attribute interpolation for memory-efficient deferred shading](https://cg.ivd.kit.edu/publications/2015/dais/DAIS.pdf)_. In Proceedings of the 7th Conference on High-Performance Graphics (HPG '15). Association for Computing Machinery, New York, NY, USA, 43-49. https://doi.org/10.1145/2790060.2790066
 
 [^dais-extended]: Part II Chapter 3, Listing 3.2 of the book  _GPU Pro 7: Advanced Rendering Techniques (1st ed.)_ by Engel, W. (Ed.). (2016). A K Peters/CRC Press. https://doi.org/10.1201/b21261
 
