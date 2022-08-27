@@ -75,17 +75,37 @@ Another caveat came to my notice is the `propertyFlags` of Vulkan memory. One co
 
 ## Dynamic diffuse global illumination (DDGI)
 
-The implementation of DDGI is fairly straightforward, given the comprehensive description in the original papers [^ddgi] [^scaling-ddgi] [^mcguire-2017-gi] and some optimization techniques explained [in this article](https://diharaw.github.io/post/adventures_in_hybrid_rendering/#global-illumination). One slightly irritating thing is the additional step (`VkDispatch`) for simply copying the border texels after updating the irradiance textures, because synchronization is needed right before updating the border texels. One trick I've tried out is to treat the vertices of the grid for each probe as the value stored in the irradiance textures. That means we need a `7 x 7` grid for a probe resolution of `8 x 8`, which is slightly lower than it would haven been, but the result differs not very much. Nevertheless, I finally decided to copy the border texels. To avoid the additional kernel launch, I figured out another trick after some observation. First I wrote a [shadertoy app](https://www.shadertoy.com/view/NsfBWf) to visualize the octahedral mapping more clearly. With the help of the app, I started to got a hang of the pattern of the copy operations.
+The implementation of DDGI is fairly straightforward, given the comprehensive description in the original papers [^ddgi] [^scaling-ddgi] [^mcguire-2017-gi] and some optimization techniques explained [in this article](https://diharaw.github.io/post/adventures_in_hybrid_rendering/#global-illumination). One slightly irritating thing is the additional step (`VkDispatch`) for simply copying the border texels after updating the irradiance textures, because synchronization is needed right before copying the border texels. One trick I've tried out is to treat the vertices of the grid for each probe as the value stored in the textures of the irradiance field. That means we need a $7 \times 7$ texture for a probe resolution of $8 \times 8$, which is slightly lower than it would haven been, but the result differs not very much. There were no obvious artifacts on the radiance probes either. Nevertheless, I decided to copy the border texels at some point. To avoid the additional kernel launch, I figured out another trick after some observation. With the help of [the shader](https://www.shadertoy.com/view/NsfBWf) I wrote on shadertoy to visualize the octahedral mapping, the pattern of the copy operations finally became clear to me.
 
-{{< figure src="/images/posts/2022-08-22/octahedral-mapping.jpg" width="40%" class="center-figure" link="https://www.shadertoy.com/view/NsfBWf" caption="shadertoy app to visualize octahedral mapping" >}}
+{{< figure src="/images/posts/2022-08-22/octahedral-mapping.jpg" width="50%" class="center-figure" link="https://www.shadertoy.com/view/NsfBWf" caption="visualization of octahedral mapping" >}}
 
-For simplicity, let's assume the probe resolution is `8 x 8` (square with four yellow filled cells as its four corners in the following image), then the padded probe resolution is `10 x 10`. For greenish or reddish cells, the source cell and destination cell of each copy operation need to be filled with exactly the same color. Obviously every such cell (henceforth referred to as _type 1_ texel) in the `8 x 8` square is only copied once, either vertically or horizontally. It is slightly more complicated for the yellow filled cells (henceforth referred to as _type 2_ texel), as each of them is copy three times, vertically, horizontally and diagonally.
+Without loss of generality, let's assume the resolution of the original probe texture is $8 \times 8$ (square with four yellow filled texels $\colorbox{#f0f010}{\textcolor{#a0a0a0}{\textsf{A}}}, \colorbox{#f0f010}{\textcolor{#a0a0a0}{\textsf{B}}}, \colorbox{#f0f010}{\textcolor{#a0a0a0}{\textsf{C}}}, \colorbox{#f0f010}{\textcolor{#a0a0a0}{\textsf{D}}}$ as its four corners in the following image), the coordinates of texel $\colorbox{#f0f010}{\textcolor{#a0a0a0}{\textsf{A}}}$ is $(0, 0)$ and $+y$ axis goes downwards, then the resolution of the padded probe texture is $10 \times 10$ with the coordinates of its top left texel being $(-1, -1)$. For texels filled with greenish or reddish color (henceforth referred to as _type 1_ texels), the source texel and destination texel of each copy operation need to be filled with exactly the same color. 
+Obviously every such texel in the original probe texture is only copied once, either vertically or horizontally. It is a bit more complicated for the yellow filled texels (henceforth referred to as _type 2_ texels), as each of them is copied three times: vertically, horizontally and diagonally.
 
 {{< figure src="/images/posts/2022-08-22/ddgi-copy-border-texel.svg" width="40%" class="center-figure" >}}
 
+Some notations:
+* $r$: the resolution of the original probe texture. In the image above, $r = 8$;
+* $n$: maximum value of the $x-$ or $y-$coordinate of the texels in the original probe texture, clearly $n = r -1$;
+* $i$: denotes $x-$ or $y-$coordinate of a texel in the original probe texture;
+* [Iverson bracket](https://en.wikipedia.org/wiki/Iverson_bracket) $[\dots]$ is used in the following definitions;
+* $q_i := [ i = n]$;
+* $m_i := [i = q_i \cdot n]$;
+* $g_i := i + 2q_i - 1$;
+* $h_i := n - i$;
+* $f_i := m_i \cdot g_i + (1 - m_i) \cdot h_i$;
+* $d_i := r \cdot (1 - q_i) - q_i$;
+
+It may seem unobvious, but the type of the texel with coordinates $(x, y)$ is $m_x + m_y$. 
+Besides, $m_i = 1$ means coordinate $i$ is mapped to $g_i$ (shifted by $\pm 1$ along the corresponding axis) and $m_i = 0$ means $i$ is mapped to $h_i$ (reflected along the corresponding axis). $f_i$ is the combined result.
+ _Type 1_ texel $(x, y)$ is uniquely mapped to $(f_x, f_y)$. 
+ _Type 2_ texel $(x, y)$ is vertically mapped to $(g_x, h_y)$, horizontally mapped to $(h_x, g_y)$, and diagonally mapped to $(d_x, d_y)$.
+
+ With these simple functions, border texels can be copied in the same pass that updates the original probe texture. Although a branch is introduced, this trick can spare us a memory barrier and another kernel launch. If the updated probe texels are first written to shared memory, as in [my implementation](https://gitlab.com/chao-jia/spock/-/blob/21e4d17588fe05bf3edc2620f3478107f4d53342/etc/glsl/basic_renderer/ddgi/update_irradiance.comp#L134), it could also help avoid some expensive global memory loads when copying border texels.
+
 to be continued...
 
-[^basic-renderer-source-code]: [Source code on gitlab](https://gitlab.com/chao-jia/spock#the-basic-renderer)
+[^basic-renderer-source-code]: [Source code](https://gitlab.com/chao-jia/spock#the-basic-renderer) on GitLab and [video](https://youtu.be/Ca6BCejFWLw) on YouTube
 
 [^paper-2013]: Christopher A. Burns and Warren A. Hunt, [The Visibility Buffer: A Cache-Friendly Approach to Deferred Shading](https://jcgt.org/published/0002/02/04/), Journal of Computer Graphics Techniques (JCGT), vol. 2, no. 2, 55-69, 2013
 

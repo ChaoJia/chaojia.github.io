@@ -10,11 +10,10 @@ thumbnail = "images/portfolio-thumbnail.jpg"
 
 {{< youtube Ca6BCejFWLw>}}
 
-Showcase of my Vulkan renderer featuring Dynamic Diffuse Global Illumination (DDGI) [^scaling-ddgi] [^ddgi], ray-traced soft shadow and specular reflections with spatial-temporal denoising (SVGF [^svgf]). The renderer is implemented with C++, Vulkan and GLSL. 
+My Vulkan renderer featuring Dynamic Diffuse Global Illumination (DDGI) [^scaling-ddgi] [^ddgi], ray-traced soft shadow and specular reflections with spatial-temporal denoising (SVGF [^svgf]). The renderer is implemented with C++, Vulkan and GLSL. 
+More infos about the renderer can be found in [this post]({{< ref "/content/posts/22-08-22-vulkan-basic-renderer.md" >}}). 
 
-Source code: 
-https://gitlab.com/chao-jia/spock
-
+[[source code](https://gitlab.com/chao-jia/spock)]
 
 ## Real-Time Unified Physics Simulation of Variable Sized Particles
 {{< youtube MOWeGT9jZxQ >}}
@@ -25,16 +24,14 @@ In this project,  we removed the restriction of fixed radius of the particles in
 I also implemented and optimized algorithms for solid voxelization and construction of signed distance field on the GPU using CUDA to accelerate scene initialization. The scenes are rendered with OpenGL 4.
 For efficient collision detection between differently sized particles and generation of density constraints for fluids, I implemented BVH (Bounding Volume Hierarchy) construction and traversal on the GPU. 
 
-source code:
-https://gitlab.com/chao-jia/pbd
+[[source code](https://gitlab.com/chao-jia/pbd)] [{{< pdf-download path="/files/master_thesis_chao_jia.pdf" title="master thesis" >}}]
 
 ## Heightfield Water Simulation and Rendering
 {{< youtube xU9GIU0JsA0 >}}
 
 Heightfield-based real-time water simulation with C++, Qt 5  and OpenGL 4 as a freely chosen topic for the final assignment of a practicum course in 2016 summer semester.  Inspired by WebGL Water (https://madebyevan.com/webgl-water/).
 
-Source code:
-https://gitlab.com/chao-jia/height_field_water
+[[source code](https://gitlab.com/chao-jia/height_field_water)]
 
 
 ## Other projects
