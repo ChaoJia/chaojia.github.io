@@ -42,5 +42,5 @@ See [here]({{< ref "/content/about.md#projects" >}}) for more projects I've work
 
 [^scaling-ddgi]: Zander Majercik, Adam Marrs, Josef Spjut, and Morgan McGuire, [Scaling Probe-Based Real-Time Dynamic Global Illumination for Production](https://jcgt.org/published/0010/02/01/), Journal of Computer Graphics Techniques (JCGT), vol. 10, no. 2, 1-29, 2021
 [^ddgi]: Zander Majercik, Jean-Philippe Guertin, Derek Nowrouzezahrai, and Morgan McGuire, [Dynamic Diffuse Global Illumination with Ray-Traced Irradiance Fields](https://jcgt.org/published/0008/02/01/), Journal of Computer Graphics Techniques (JCGT), vol. 8, no. 2, 1-30, 2019
-[^svgf]: Schied, Christoph, et al. ["Spatiotemporal variance-guided filtering: real-time reconstruction for path-traced global illumination."](https://dl.acm.org/doi/10.1145/3105762.3105770) Proceedings of High Performance Graphics. 2017. 1-12.
+[^svgf]: Schied, Christoph, et al. [Spatiotemporal variance-guided filtering: real-time reconstruction for path-traced global illumination.](https://dl.acm.org/doi/10.1145/3105762.3105770) Proceedings of High Performance Graphics. 2017. 1-12.
 [^2014-Macklin]: Miles Macklin, Matthias Müller, Nuttapong Chentanez, and Tae-Yong Kim. 2014. [Unified particle physics for real-time applications](https://doi.org/10.1145/2601097.2601152). ACM Trans. Graph. 33, 4, Article 153 (July 2014), 12 pages.
