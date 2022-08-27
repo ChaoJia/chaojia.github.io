@@ -10,7 +10,7 @@ thumbnail = "images/portfolio-thumbnail.jpg"
 
 {{< youtube Ca6BCejFWLw>}}
 
-My Vulkan renderer featuring Dynamic Diffuse Global Illumination (DDGI) [^scaling-ddgi] [^ddgi], ray-traced soft shadow and specular reflections with spatial-temporal denoising (SVGF [^svgf]). The renderer is implemented with C++, Vulkan and GLSL. 
+My Vulkan renderer featuring Dynamic Diffuse Global Illumination (DDGI) [^scaling-ddgi] [^ddgi], ray-traced soft shadow and specular reflections with spatio-temporal denoising (SVGF [^svgf]). The renderer is implemented with C++, Vulkan and GLSL. 
 More infos about the renderer can be found in [this post]({{< ref "/content/posts/22-08-22-vulkan-basic-renderer.md" >}}). 
 
 [[source code](https://gitlab.com/chao-jia/spock)]

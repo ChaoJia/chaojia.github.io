@@ -14,7 +14,7 @@ tags:
 thumbnail: "/images/posts/2022-08-22/basic-vulkan-renderer-thumbnail.jpg"
 ---
 
-As part of the effort to get myself familiar with Vulkan, I developed a real-time renderer featuring global illumination with RTX technique [^basic-renderer-source-code]. Aside from Dynamic Diffuse Global Illumination (DDGI) [^ddgi], ray-traced soft shadow and specular reflections with spatial temporal-denoising (SVGF [^svgf]), I've also tried out some other interesting ideas.
+As part of the effort to get myself familiar with Vulkan, I developed a real-time renderer featuring global illumination with RTX technique [^basic-renderer-source-code]. Aside from Dynamic Diffuse Global Illumination (DDGI) [^ddgi], ray-traced soft shadow and specular reflections with spatio-temporal denoising (SVGF [^svgf]), I've also tried out some other interesting ideas.
 
 <!--more-->
 ## Visibility buffer rendering and scene management
@@ -101,7 +101,12 @@ Besides, $m_i = 1$ means coordinate $i$ is mapped to $g_i$ (shifted by $\pm 1$ a
  _Type 1_ texel $(x, y)$ is uniquely mapped to $(f_x, f_y)$. 
  _Type 2_ texel $(x, y)$ is vertically mapped to $(g_x, h_y)$, horizontally mapped to $(h_x, g_y)$, and diagonally mapped to $(d_x, d_y)$.
 
- With these simple functions, border texels can be copied in the same pass that updates the original probe texture. Although a branch is introduced, this trick can spare us a memory barrier and another kernel launch. If the updated probe texels are first written to shared memory, as in [my implementation](https://gitlab.com/chao-jia/spock/-/blob/21e4d17588fe05bf3edc2620f3478107f4d53342/etc/glsl/basic_renderer/ddgi/update_irradiance.comp#L134), it could also help avoid some expensive global memory loads when copying border texels.
+ With these simple functions, border texels can be copied in the same pass that updates the original probe texture, as in [my implementation](https://gitlab.com/chao-jia/spock/-/blob/21e4d17588fe05bf3edc2620f3478107f4d53342/etc/glsl/basic_renderer/ddgi/update_irradiance.comp#L134). Although a branch is introduced, this trick can spare us a memory barrier and another kernel launch. Since the updated probe texels still reside in registers (if no register spilling), it can help avoid some expensive global memory loads (if uncached) when copying border texels.
+
+## Spatio-temporal denoising
+
+In this renderer, the noise mainly comes from soft shadow and glossy reflection because of the low sample rate (1 spp per frame for each). The (pseudo-)random numbers used for sampling are drawn from 4 blue noise textures downloaded from [here](https://momentsingraphics.de/BlueNoise.html). Sampling for soft shadow boils down to uniform sampling on a disk, which is fairly simple and well explained in [this article](https://blog.demofox.org/2020/05/16/using-blue-noise-for-raytraced-soft-shadows/). Sampling the direction of reflection for glossy materials, or equivalently sampling the normal distribution function, on the other hand, is not trivial. To reduce the variance of the sampling, I used the routine presented by Heitz [^2018-heitz-sampling-vndf].
+
 
 to be continued...
 
@@ -122,3 +127,5 @@ to be continued...
 [^nanite-siggraph-2021]: [Nanite - A Deep Dive](https://advances.realtimerendering.com/s2021/Karis_Nanite_SIGGRAPH_Advances_2021_final.pdf)
 
 [^zeux-2020-vk-renderer-bindless]: See the section _Bindless descriptor designs_ of [this article](https://zeux.io/2020/02/27/writing-an-efficient-vulkan-renderer/)
+
+[^2018-heitz-sampling-vndf]: Eric Heitz, [Sampling the GGX Distribution of Visible Normals](https://jcgt.org/published/0007/04/01/), Journal of Computer Graphics Techniques (JCGT), vol. 7, no. 4, 1-13, 2018
