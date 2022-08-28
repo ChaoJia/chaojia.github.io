@@ -1,3 +1,4 @@
+<figure style="text-align: center;">
 <div class="img-cmp-div" data-width-ratio="{{ .Get "width-ratio" }}">
   <div class="img-cmp-bg-div">
     <img class="img-cmp-bg" src="{{ .Get "src-bg" }}">
@@ -7,3 +8,8 @@
     <img class="img-cmp-fg" src="{{ .Get "src-fg" }}">
   </div>
 </div>
+{{- $title := .Get "title" }}
+{{- if ne "" $title  }}
+  <figcaption>{{ $title }}</figcaption>
+{{- end }}
+</figure>

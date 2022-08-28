@@ -137,7 +137,11 @@ An advantage of this approach is that once the matrices $\bm{T_x}$ and $\bm{T_y}
 
 ## Result {#result}
 
-{{< img-cmp-slider src-fg="/images/posts/2021-11-29/render_analytical.png" src-bg="/images/posts/2021-11-29/render_hardware.png" width-ratio="1" >}}
+{{< img-cmp-slider 
+  src-fg="/images/posts/2021-11-29/render_analytical.png"
+  src-bg="/images/posts/2021-11-29/render_hardware.png" width-ratio="1" 
+  title="Left: analytical derivatives; Right: hardware derivatives"
+>}}
 
 The image on the left is rendered with analytically calculated attributes and derivatives, which looks identical to the render using hardware-generated attributes and derivatives on the right. The subtle difference can be revealed by some statistics of per pixel difference (normalized):
 

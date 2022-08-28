@@ -105,10 +105,26 @@ Besides, $m_i = 1$ means coordinate $i$ is mapped to $g_i$ (shifted by $\pm 1$ a
 
 ## Spatio-temporal denoising
 
-In this renderer, the noise mainly comes from soft shadow and glossy reflection because of the low sample rate (1 spp per frame for each). The (pseudo-)random numbers used for sampling are drawn from 4 blue noise textures downloaded from [here](https://momentsingraphics.de/BlueNoise.html). Sampling for soft shadow boils down to uniform sampling on a disk, which is fairly simple and well explained in [this article](https://blog.demofox.org/2020/05/16/using-blue-noise-for-raytraced-soft-shadows/). Sampling the direction of reflection for glossy materials, or equivalently sampling the normal distribution function, on the other hand, is not trivial. To reduce the variance of the sampling, I used the routine presented by Heitz [^2018-heitz-sampling-vndf].
+In this renderer, the noise comes from soft shadow and glossy reflection because of the low sampling rate (1 spp per frame for each). The (pseudo-)random numbers used for sampling are drawn from 4 blue noise textures downloaded from [here](https://momentsingraphics.de/BlueNoise.html). Sampling for soft shadow boils down to uniform sampling on a disk, which is fairly simple and well explained in [this article](https://blog.demofox.org/2020/05/16/using-blue-noise-for-raytraced-soft-shadows/). Sampling the direction of reflection for glossy materials, or equivalently sampling the normal distribution function, on the other hand, is not trivial. The implementation of the GGX VNDF Sampling [^2018-heitz-sampling-vndf] did the trick.
 
+One issue with ray-traced shadow is the terminator problem caused by the fact that the smoothness of the geometry is merely approximated by the triangle meshes. If the origins of the shadow ray reside in the underlying triangles, we will inevitably get artifacts because the geometry those triangle meshes are trying to approximate is usually not flat. To work around this issue, I offset the shadow ray origins based on the vertex normals of the triangles, as explained in the article _Hacking the Shadow Terminator_ [^hanika-rt-gems-2]. The resulting shadow is much more natural when shadow ray origin offset is applied, as shown in the following image. 
 
-to be continued...
+{{< 
+  img-cmp-slider 
+  src-fg="/images/posts/2022-08-22/shadow_1_offset_shading_point.png" 
+  src-bg="/images/posts/2022-08-22/shadow_2_without_offset_shading_point.png" width-ratio="1" 
+  title="Left: with shadow ray origin offset; Right: without shadow ray offset"
+>}}
+
+For shadow denoising, I closely followed SVGF [^svgf], which introduced a manually tunable parameter $\alpha$ to control the temporal accumulation rate. It can be seen from [this video](https://youtu.be/Ca6BCejFWLw?t=142) that the temporal accumulation plays an important role in the quality of the denoising. Therefore I was a bit skeptical while implementing temporal filtering technique in ReBLUR [^reblur] for reflections because the accumulation rate is automatically adjusted. But the result turned out to be pretty satisfying. The rest of the denoising part for reflection still followed SVGF since it is already implemented in shadow denoising and I was quite confident about it. 
+
+## In retrospect
+
+Despite the renderer can run in real-time ($70+$ fps for the Sponza scene on RTX 2070 mobile), the denoising part is not optimized as it was done in haste. For example, tile-based denoising could have been used because a large portion of shadow does not need to be denoised.
+
+DDGI is not entirely flawless either. Light/shadow leak can still happen if some probes are in suboptimal position. Besides, the hysteresis parameter that controls the pace of temporal integration cannot be set too small to avoid unstable behavior, but the lag becomes noticeable when it is very large. Next time I may try to implement something like [Lumen in Unreal Engine 5](https://www.youtube.com/watch?v=2GYXuM10riw).
+
+Other interesting topics such as animation support in scene management, temporal anti-aliasing (TAA) and polygonal light should definitely be on my todo list as well. 
 
 [^basic-renderer-source-code]: [Source code](https://gitlab.com/chao-jia/spock#the-basic-renderer) on GitLab and [video](https://youtu.be/Ca6BCejFWLw) on YouTube
 
@@ -129,3 +145,7 @@ to be continued...
 [^zeux-2020-vk-renderer-bindless]: See the section _Bindless descriptor designs_ of [this article](https://zeux.io/2020/02/27/writing-an-efficient-vulkan-renderer/)
 
 [^2018-heitz-sampling-vndf]: Eric Heitz, [Sampling the GGX Distribution of Visible Normals](https://jcgt.org/published/0007/04/01/), Journal of Computer Graphics Techniques (JCGT), vol. 7, no. 4, 1-13, 2018
+
+[^hanika-rt-gems-2]: Hanika, J. (2021). [Hacking the Shadow Terminator](https://doi.org/10.1007/978-1-4842-7185-8_4). In: Marrs, A., Shirley, P., Wald, I. (eds) Ray Tracing Gems II. Apress, Berkeley, CA.
+
+[^reblur]: Zhdan, D. (2021). [ReBLUR: A Hierarchical Recurrent Denoiser](https://doi.org/10.1007/978-1-4842-7185-8_49). In: Marrs, A., Shirley, P., Wald, I. (eds) Ray Tracing Gems II. Apress, Berkeley, CA.
