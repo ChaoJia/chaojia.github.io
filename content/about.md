@@ -12,7 +12,7 @@ Hi, my name is Chao JIA ([IPA](https://en.wikipedia.org/wiki/International_Phone
 ## Projects
 ---
 
-Some of the projects I've worked on can be found in [__my portfolio__]({{< ref "/content/portfolio.md" >}}). Here are some other projects during my work at TU Wien:
+Some of the projects I've worked on can be found in [__my portfolio__]({{< ref "portfolio.md" >}}). Here are some other projects during my work at TU Wien:
 
 * For the paper _View-Dependent Impostors for Architectural Shape Grammars_ [^pg21-impostors], I extended a __C++ template library__ for shape grammar evaluation and implemented level-of-detail mechanism for procedural geometry shape grammars; 
 * For the paper _On Provisioning Procedural Geometry Workloads on Edge Architectures_ [^webist21-edge], I implemented and optimized GPU shape-grammar evaluation using CUDA, developed an efficient cross-platform web service for procedural geometry workload with __C++ multithreading__ and __Boost__ library, and used __docker container__ to facilitate fast deployment on different edge devices. [Protocol buffers (Protobuf)](https://developers.google.com/protocol-buffers) was used for client-server communication.

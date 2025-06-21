@@ -14,7 +14,7 @@ html
     .color
       &_choice
         &::after
-          background-image: url("#{$images}night-moon.svg")
+          background-image: url("#{$imagesPath}night-moon.svg")
           transform: translateX(1.4rem)
 
   @media (prefers-color-scheme: dark)
@@ -23,7 +23,7 @@ html
       .color
         &_choice
           &::after
-            background-image: url("#{$images}night-moon.svg")
+            background-image: url("#{$imagesPath}night-moon.svg")
             transform: translateX(1.4rem)
   &[data-mode="dim"]
     --light: hsla(0,0%,100%,0.67) 

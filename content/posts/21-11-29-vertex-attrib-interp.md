@@ -216,7 +216,7 @@ which implies that $\frac{1}{w}$ is linear in screen space.
 
 [^filmic-world-blog]: [Visibility Buffer Rendering with Material Graphs](http://filmicworlds.com/blog/visibility-buffer-rendering-with-material-graphs/)
 
-[^glsl-impl]: My first glsl implementation that roughly followed this article can be found [here](https://gitlab.com/chao-jia/spock/-/blob/edc9e132e47c6696f2cc08002368224536107bbd/assets/glsl/basic_test/lighting_utils.h.glsl#L332); the derivation and the glsl implementation was already done by 29th Nov 2021, but I only had the time a few months later to get the write-up done, and made some improvement to the glsl code. Hopefully the [refined code](https://gitlab.com/chao-jia/spock/-/blob/21e4d17588fe05bf3edc2620f3478107f4d53342/etc/glsl/basic_renderer/miscellaneous.hsl#L389) is more readable
+[^glsl-impl]: My initial glsl implementation can be found [here](https://gitlab.com/chao-jia/spock/-/blob/edc9e132e47c6696f2cc08002368224536107bbd/assets/glsl/basic_test/lighting_utils.h.glsl#L332), and later I improved the readability a little bit ([refined code](https://gitlab.com/chao-jia/spock/-/blob/21e4d17588fe05bf3edc2620f3478107f4d53342/etc/glsl/basic_renderer/miscellaneous.hsl#L389))
 
 [^dais-paper]: Christoph Schied and Carsten Dachsbacher. 2015. _[Deferred attribute interpolation for memory-efficient deferred shading](https://cg.ivd.kit.edu/publications/2015/dais/DAIS.pdf)_. In Proceedings of the 7th Conference on High-Performance Graphics (HPG '15). Association for Computing Machinery, New York, NY, USA, 43-49. https://doi.org/10.1145/2790060.2790066
 
