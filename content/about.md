@@ -2,12 +2,16 @@
 title = "About Me"
 description = "About Chao Jia"
 date = "2022-05-13"
-lastmod = "2022-06-29"
+lastmod = "2026-03-07"
 aliases = ["about", "about-chao-jia", "contact"]
 author = "Chao Jia"
 +++
 
-Hi, my name is Chao JIA ([IPA](https://en.wikipedia.org/wiki/International_Phonetic_Alphabet): `/tʃaʊ. dʒiʌ/`). I worked as a [research assistant](https://www.cg.tuwien.ac.at/staff/ChaoJia) in the [Rendering and Modeling group](https://www.cg.tuwien.ac.at/group/Rendering-and-Modeling) at TU Wien from July 2018 until June 2022 after I got my Master's degree in computer science from [Karlsruhe Institute of Technology](https://www.kit.edu/). I'm interested in __real-time rendering__ (__Vulkan__ and __OpenGL 4__), __high-performance C++__, __physically based simulation__ and __general-purpose computing on GPU__ (__GPGPU__). I'm no stranger to scripting languages such as __CMake__ and __Python__ either. 
+Hi, my name is Chao JIA ([IPA](https://en.wikipedia.org/wiki/International_Phonetic_Alphabet): `/tʃaʊ. dʒiʌ/`). I'm a programmer working on Snowdrop engine at Ubisoft Blue Byte, mainly working on graphics optimizations. I have contributed multiple optimization techniques for the [Star Wars Outlaws switch 2 port](https://www.youtube.com/watch?v=Dy5-PykWvk0), which helped improve and stabilize the frame rate of the game. I also fixed multiple vexing and inscrutable visual glitches that had given us a lot of headache.
+
+Previously I worked as a [research assistant](https://www.cg.tuwien.ac.at/staff/ChaoJia) in the [Rendering and Modeling group](https://www.cg.tuwien.ac.at/group/Rendering-and-Modeling) at TU Wien from July 2018 until June 2022 after I got my Master's degree in computer science from [Karlsruhe Institute of Technology](https://www.kit.edu/).
+
+I'm interested in C++, real-time rendering, geometry processing, physically based simulation and general-purpose computing on GPU (GPGPU). I'm no stranger to scripting languages such as _CMake_ and _Python_ either. 
 
 ## Projects
 ---
