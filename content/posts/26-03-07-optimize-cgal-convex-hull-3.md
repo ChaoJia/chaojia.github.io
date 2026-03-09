@@ -3,7 +3,7 @@ title: 'Optimize CGAL 3D convex hull'
 description: 'Optimize CGAL 3D convex hull'
 # summary: 'Optimize CGAL 3D convex hull' # For the post in lists.
 date: 2026-03-07
-lastmod: 2026-03-07
+lastmod: 2026-03-09
 math: true
 categories:
   - geometry
@@ -63,7 +63,7 @@ for (face in tds.faces)
   }
 ```
 
-One more feature I would like to have for convex hull is that the output should be indices into the input point set, which means I cannot remove points from the input point set because each face have to store the indices of the three points as its vertices. So I use a `vector<uint8_t>` to store flags of the vertices. Similarly, each face also has a `uint8_t` field for the flags. Faces are stored in a `vector`.
+One more feature I would like to have for convex hull is that the output should be indices into the input point set, which means I cannot remove points from the input point set because each face have to store the indices of the three points as its vertices. So I use a `vector<uint8_t>` to store flags of the vertices. Similarly, each face also has a `uint8_t` field for the flags. Faces are stored in `vector<face_t>`, the only `vector` that actually stores `face_t` in my implementation.
 
 It's important to reserve enough space for faces because we would want to avoid copy operations incurred by reallocation. Four times the number of the input vertices seems to be good enough for me, even for a heavily tessellated sphere.
 
@@ -108,7 +108,7 @@ As mentioned earlier, removing a face from `std::vector<face_t>` is done by swap
 
 The trick is to store all the non-pending faces in front of the pending faces, and keep track of the index of the first pending face. To maintain this loop invariant, it's necessary to be able to swap two faces. There is a bit more to do than simply exchanging the content of two memory places. Each face has references to its three (and only three) neighbors. If one face is relocated, and thereby gets a different index, we need to update its neighbors about the index change. To make this process more efficient, I introduced a new member `face_t::in_neighbor_indices` to keep track of references to a face in its neighbor faces.
 
-With the small inconveniences above addressed, there is nothing stopping me from replacing all the `list`s with `vector`s. Another easy optimization is to define all the `vector`s before entering the loop to avoid frequent construction and destruction of `vector`s. 
+With the small inconveniences above addressed, there is nothing stopping me from replacing all the `list`s with `vector`s. Another easy optimization is to define all the `vector`s before entering the loop to avoid frequent construction and destruction of `vector`s. All handles in those `list`s will be replaced with indices into the `vector` of faces or points.
 
 ### 2. Find visible set {#cgal-quickhull-impl-find-visible-set}
 ```c
@@ -241,8 +241,10 @@ This step is only required by my implementation. After last step, we can compute
 But at this moment there might be some misplaced faces. (Most of) these misplaced faces are either replaced by new faces or marked as to be removed. I used two passes to relocate those misplaced faces.
 In the first pass, the faces to be removed are also considered pending faces so that they will be relocated to the right side of the last non-pending face. Now we have two types of misplaced faces. Type A: non-pending face with index no less than `new_pending_face_begin` and type B: pending face with index smaller than `new_pending_face_begin`.
 
-Apart from the `visible_set`, I also need to check the faces between the old first pending face (`pending_face_begin`) and `new_pending_face_begin` for potentially misplaced faces due to the change of the position of the first pending face. At the beginning of the first pass, the faces that are not touched by this iteration but still misplaced are pushed into a stack. Then I start to go over each face in the visible set and check if it is a different type of misplacement than the top of the stack, if so swap it with the top of the stack, and pop the top of the stack, otherwise push it to the stack. Although faces to be removed are treated like pending faces, but an additional `vector` is used to store the (new) indices of these faces, let's say the name of this `vector` is `removed_face_indices`.
+Apart from the `visible_set`, I also need to check the faces between the old first pending face (`pending_face_begin`) and `new_pending_face_begin` for potentially misplaced faces due to the change of the position of the first pending face. 
+At the beginning of the first pass, the indices of the faces that are not touched by this iteration but still misplaced are pushed into a stack. 
+Then I start to go over each face index in the visible set and check if it is a different type of misplacement than the top of the stack, if so swap the faces (in the `vector<face_t>`) these two indices refer to, and pop the top of the stack, otherwise push it to the stack. Although faces to be removed are treated like pending faces, but an additional `vector` is used to store the (new) indices of these faces, let's say the name of this `vector` is `removed_face_indices`.
 
-By the end of the first pass, the stack should be empty, and all the non-pending faces should be located to the left of all the pending faces that start at `new_pending_face_begin`, because it is impossible that the faces in the stack are of the same type of misplacement, as that would mean the `new_pending_face_begin` should be wrong. In the second pass the faces to be removed (in `removed_face_indices`) will be relocated to the end of `faces` and eventually get removed by shrinking the size of `faces`.
+By the end of the first pass, the stack should be empty, and in `vector<face_t>`, all the non-pending faces should be located to the left of all the pending faces that start at `new_pending_face_begin`, because it is impossible that the face indices in the stack are of the same type of misplacement, as that would mean the `new_pending_face_begin` should be wrong. In the second pass the faces to be removed (in `removed_face_indices`) will be relocated to the end of `vector<face_t>` and eventually get removed by shrinking the size of `vector<face_t>`.
 
 Clearly the complexity of this additional step is linear to the size of the visible set in each iteration, so the overhead this approach entails should be negligible compared to the performance gain it could potentially bring. The performance test result also confirms that.
