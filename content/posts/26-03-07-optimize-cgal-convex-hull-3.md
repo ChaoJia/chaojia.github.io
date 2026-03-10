@@ -238,11 +238,15 @@ In this step, I need to again update the number of pending and non-pending faces
 
 This step is only required by my implementation. After last step, we can compute the new position of the first pending face (referred to as `new_pending_face_begin` in the following) should all non-pending faces were located before all pending faces.
 
-But at this moment there might be some misplaced faces. (Most of) these misplaced faces are either replaced by new faces or marked as to be removed. I used two passes to relocate those misplaced faces.
+But at this moment there might be some misplaced faces. These misplaced faces are from three sources:
+1. new faces that replace visible faces;
+2. visible faces marked as to be removed;
+3. untouched faces become misplaced due to `pending_face_begin` moved to `new_pending_face_begin`.
+
+I used two passes to relocate those misplaced faces.
 In the first pass, the faces to be removed are also considered pending faces so that they will be relocated to the right side of the last non-pending face. Now we have two types of misplaced faces. Type A: non-pending face with index no less than `new_pending_face_begin` and type B: pending face with index smaller than `new_pending_face_begin`.
 
-Apart from the `visible_set`, I also need to check the faces between the old first pending face (`pending_face_begin`) and `new_pending_face_begin` for potentially misplaced faces due to the change of the position of the first pending face. 
-At the beginning of the first pass, the indices of the faces that are not touched by this iteration but still misplaced are pushed into a stack. 
+At the beginning of the first pass, the indices of the faces that are not touched by this iteration but still misplaced (source 3) are pushed into a stack. 
 Then I start to go over each face index in the visible set and check if it is a different type of misplacement than the top of the stack, if so swap the faces (in the `vector<face_t>`) these two indices refer to, and pop the top of the stack, otherwise push it to the stack. Although faces to be removed are treated like pending faces, but an additional `vector` is used to store the (new) indices of these faces, let's say the name of this `vector` is `removed_face_indices`.
 
 By the end of the first pass, the stack should be empty, and in `vector<face_t>`, all the non-pending faces should be located to the left of all the pending faces that start at `new_pending_face_begin`, because it is impossible that the face indices in the stack are of the same type of misplacement, as that would mean the `new_pending_face_begin` should be wrong. In the second pass the faces to be removed (in `removed_face_indices`) will be relocated to the end of `vector<face_t>` and eventually get removed by shrinking the size of `vector<face_t>`.
