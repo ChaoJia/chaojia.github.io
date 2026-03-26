@@ -9,6 +9,7 @@ $theme: #2196f3
 html
   --bg: #1e1e1e
   --text: #333333
+  --code-bg: var(--haze)
 
   &[data-mode="dim"]
     .color
@@ -27,6 +28,4 @@ html
             transform: translateX(1.4rem)
   &[data-mode="dim"]
     --light: hsla(0,0%,100%,0.67) 
-
-  &[data-mode="lit"]
-    --code-bg: var(--haze)
+    --code-bg: var(--gray)
